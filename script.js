@@ -4,6 +4,10 @@ let usernameDetails = document.querySelector(".usernameDetails");
 let lodder = document.querySelector(".lodder");
 let prfileContainer = document.querySelector(".profileContainer");
 console.log(prfileContainer);
+let error = document.querySelector(".error");
+let main = document.querySelector(".main");
+let githubIcon = document.querySelector(".fa-github");
+let h1 = document.querySelector("h1");
 
 //get showuser container data from html
 let profile = document.querySelector(".image img");
@@ -23,32 +27,38 @@ let home = document.querySelector(".home");
 //todo showuser function
 function showUser(dataFormat) {
   if (dataFormat.message == "Not Found") {
-    usernameDetails.innerHTML = lodder.innerHTML;
+    error.style.display = "block";
+    lodder.style.display ="none";
+    prfileContainer.style.display = "none";
   } else {
-    dataFormat.avatar_url = dataFormat.avatar_url==null ? "-" : dataFormat.avatar_url;
-    dataFormat.name = dataFormat.name==null ? "-" : dataFormat.name;
-    dataFormat.login = dataFormat.login==null ? "-" : dataFormat.login;
-    dataFormat.created_at = dataFormat.created_at==null ? "-" : dataFormat.created_at;
-    dataFormat.bio = dataFormat.bio==null ? "-" : dataFormat.bio;
-    dataFormat.public_repos = dataFormat.public_repos==null ? "-" : dataFormat.public_repos;
-    dataFormat.followers = dataFormat.followers==null ? "-" : dataFormat.followers;
-    dataFormat.following = dataFormat.following==null ? "-" : dataFormat.following;
-    dataFormat.location = dataFormat.location==null ? "-" : dataFormat.location;
-    dataFormat.twitter_username = dataFormat.twitter_username==null ? "-" : dataFormat.twitter_username;
-    dataFormat.blog = dataFormat.blog==null ? "-" : dataFormat.blog;
-    dataFormat.company = dataFormat.company==null ? "-" : dataFormat.company;
+    error.style.display = "none";
+    prfileContainer.style.display = "block";
+    dataFormat.avatar_url = dataFormat.avatar_url==null ? "---" : dataFormat.avatar_url;
+    dataFormat.name = dataFormat.name==null ? "---" : dataFormat.name;
+    dataFormat.login = dataFormat.login==null ? "---" : dataFormat.login;
+    dataFormat.created_at = dataFormat.created_at==null ? "---" : dataFormat.created_at;
+    dataFormat.bio = dataFormat.bio==null ? "---" : dataFormat.bio;
+    dataFormat.public_repos = dataFormat.public_repos==null ? "---" : dataFormat.public_repos;
+    dataFormat.followers = dataFormat.followers==null ? "---" : dataFormat.followers;
+    dataFormat.following = dataFormat.following==null ? "---" : dataFormat.following;
+    dataFormat.location = dataFormat.location==null ? "---" : dataFormat.location;
+    dataFormat.twitter_username = dataFormat.twitter_username==null ? "---" : dataFormat.twitter_username;
+    dataFormat.blog = dataFormat.blog==null ? "---" : dataFormat.blog;
+    dataFormat.company = dataFormat.company==null ? "---" : dataFormat.company;
 
+    let date = dataFormat.created_at.slice(0,10).split("-").reverse().join("/");
+    console.log(date);
     prfileContainer.innerHTML = `
     <div class="profile1">
         <div class="image">
             <img src="${dataFormat.avatar_url}" alt="avtarImg">
+            <div class="name">
+            <p class="name1">${dataFormat.name}</p>
+            <p>@${dataFormat.login}</p>
         </div>
-        <div class="name">
-            <p>${dataFormat.name}</p>
-            <p>${dataFormat.login}</p>
         </div>
-        <div class="date">
-        ${dataFormat.created_at}
+        <div class="date">Joined    
+        ${date}
         </div>
     </div>
     <div class="bio">${dataFormat.bio}</div>
@@ -91,6 +101,8 @@ async function fetchTheData() {
   if (serachBarText.length <= 0) {
     usernameDetails.innerHTML = lodder.innerHTML;
   } else {
+    lodder.style.display = "none";
+    prfileContainer.style.display = "flex"
     let data = await fetch(`https://api.github.com/users/${serachBarText}`);
     let dataFormat = await data.json();
     //function which are show our user
@@ -99,3 +111,23 @@ async function fetchTheData() {
 }
 
 searchButton.addEventListener("click", fetchTheData);
+
+
+//todo light mode and dark mode
+let darkModeButton = document.querySelector("#moon");
+let lightModeButton = document.querySelector("#sun");
+darkModeButton.addEventListener("click",()=>{
+    lightModeButton.style.display = "block";
+    darkModeButton.style.display = "none";
+    main.style.backgroundColor = "white";
+    githubIcon.style.color = "black";
+    h1.style.color = "black";
+})
+
+lightModeButton.addEventListener("click",()=>{
+    darkModeButton.style.display = "block";
+    lightModeButton.style.display = "none";
+    main.style.backgroundColor = "black";
+    githubIcon.style.color = "white";
+    h1.style.color = "white";
+})
